@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
@@ -32,9 +33,16 @@ class MainActivity : AppCompatActivity() {
                     startActivityForResult(intent, 2)
                 }
                 "delete" -> {
-                    students.removeAt(position)
-                    adapter.notifyItemRemoved(position)
-                    Toast.makeText(this, "Đã xoá sinh viên", Toast.LENGTH_SHORT).show()
+                    AlertDialog.Builder(this)
+                        .setTitle("Xác nhận xoá")
+                        .setMessage("Bạn có chắc chắn muốn xoá sinh viên này không?")
+                        .setPositiveButton("Xoá") { _, _ ->
+                            students.removeAt(position)
+                            adapter.notifyItemRemoved(position)
+                            Toast.makeText(this, "Đã xoá sinh viên", Toast.LENGTH_SHORT).show()
+                        }
+                        .setNegativeButton("Huỷ", null)
+                        .show()
                 }
                 "call" -> {
                     val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${student.phone}"))
